@@ -1,0 +1,37 @@
+name: "scalified/cleanup-action"
+description: "Cleans up the workspace and user-defined paths"
+author: "Scalified"
+branding:
+  icon: "trash-2"
+  color: "gray-dark"
+
+inputs:
+  paths:
+    description: "List of files and directories to remove"
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - id: cleanup
+      name: "Cleanup"
+      env:
+        INPUT_PATHS: ${{ inputs.paths }}
+      run: |
+        # Cleanup '${{ github.workspace }}' workspace
+        echo "::group::🧹 Cleaning up '${{ github.workspace }}' workspace"
+        rm -rf ${{ github.workspace }}/{*,.[!.]*,..?*}
+        echo "✅ Workspace '${{ github.workspace }}' has been cleaned"
+        echo "::endgroup::"
+
+        if [ -n "$INPUT_PATHS" ]; then
+          echo "::group::🧹 Cleaning up user-defined paths"
+          read -ra PATHS <<< "$INPUT_PATHS"
+          for path in "${PATHS[@]}"; do
+            rm -rf "$path"
+            echo "✅ Removed '$path' path"
+          done
+          echo "::endgroup::"
+        fi
+      shell: bash
