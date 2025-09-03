@@ -5,7 +5,7 @@
 
 ## Overview
 
-A simple GitHub Action to clean the workspace and user-defined paths
+A simple GitHub Action to clean the workspace, user-defined paths, and Docker containers/images.
 
 ## Usage
 
@@ -16,14 +16,15 @@ A simple GitHub Action to clean the workspace and user-defined paths
     paths: >-
       /opt/storage
       /home/.npmrc
-
+    docker-image: my-docker-image:latest
 ```
 
 ## Inputs
 
-| Input   | Description                             | Required | Default |
-|---------|-----------------------------------------|----------|---------|
-| `paths` | List of files and directories to remove | No       | `""`    |
+| Input          | Description                                       | Required | Default |
+|----------------|---------------------------------------------------|----------|---------|
+| `paths`        | List of files and directories to remove           | No       | `""`    |
+| `docker-image` | Docker image to remove, along with its containers | No       | `""`    |
 
 ---
 

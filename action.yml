@@ -2,12 +2,16 @@ name: "scalified/cleanup-action"
 description: "Cleans up the workspace and user-defined paths"
 author: "Scalified"
 branding:
-  icon: "trash-2"
+  icon: "box"
   color: "gray-dark"
 
 inputs:
   paths:
     description: "List of files and directories to remove"
+    required: false
+    default: ""
+  docker-image:
+    description: "Docker image to remove"
     required: false
     default: ""
 
@@ -18,6 +22,7 @@ runs:
       name: "Cleanup"
       env:
         INPUT_PATHS: ${{ inputs.paths }}
+        INPUT_DOCKER_IMAGE: ${{ inputs.docker-image }}
       run: |
         # Cleanup '${{ github.workspace }}' workspace
         echo "::group::🧹 Cleaning up '${{ github.workspace }}' workspace"
@@ -32,6 +37,18 @@ runs:
             rm -rf "$path"
             echo "✅ Removed '$path' path"
           done
+          echo "::endgroup::"
+        fi
+        
+        if [ -n "$INPUT_DOCKER_IMAGE" ]; then
+          echo "::group::🧹 Removing Docker containers and '$INPUT_DOCKER_IMAGE' image"
+          CONTAINERS=$(docker ps -a -q --filter "ancestor=$INPUT_DOCKER_IMAGE")
+          if [ -n "$CONTAINERS" ]; then
+            docker rm -f $CONTAINERS
+            echo "✅ Removed containers using '$INPUT_DOCKER_IMAGE' image"
+          fi
+          docker rmi -f $INPUT_DOCKER_IMAGE
+          echo "✅ Removed Docker '$INPUT_DOCKER_IMAGE' image"
           echo "::endgroup::"
         fi
       shell: bash
