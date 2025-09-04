@@ -5,7 +5,7 @@
 
 ## Overview
 
-A simple GitHub Action to clean the workspace, user-defined paths, and Docker containers/images.
+A simple GitHub Action to clean the workspace, user-defined paths, and Docker containers/images
 
 ## Usage
 
@@ -23,6 +23,7 @@ A simple GitHub Action to clean the workspace, user-defined paths, and Docker co
 
 | Input          | Description                                       | Required | Default |
 |----------------|---------------------------------------------------|----------|---------|
+| `workspace`    | Whether to clean up the workspace directory       | No       | `true`  |
 | `paths`        | List of files and directories to remove           | No       | `""`    |
 | `docker-image` | Docker image to remove, along with its containers | No       | `""`    |
 
